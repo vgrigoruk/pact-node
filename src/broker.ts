@@ -33,6 +33,10 @@ export class Broker {
 			checkTypes.assert.string(options.password);
 		}
 
+		if ((options.password && !options.username) || (!options.password && options.username)) {
+			throw new Error("Must provide both username and password if either given");
+		}
+
 		this.options = options;
 	}
 
@@ -45,11 +49,9 @@ export class Broker {
 			headers: {
 				"Content-Type": "application/json"
 			},
-			"auth": this.options.username && this.options.password ? {
-				"user": this.options.username,
-				"password": this.options.password
-			} : null
+			"auth": this._configureAuth()
 		};
+
 		return request(requestOptions)
 			.then((data: any) => data[0])
 			.then((response) => {
@@ -80,6 +82,19 @@ export class Broker {
 			}, []))
 			.catch(() => q.reject<IWhenable<any>>(`Unable to find pacts for given provider '${this.options.provider}' and tags '${this.options.tags}'`));
 	}
+
+	private _configureAuth()  {
+		if (this.options.username && this.options.password) {
+			return {
+				"user": this.options.username,
+				"password": this.options.password
+			};
+		} else if (this.options.token) {
+			return { "bearer": this.options.token };
+		}
+
+		return null;
+	}
 }
 
 // Creates a new instance of the Pact Broker HAL client with the specified option
@@ -88,6 +103,7 @@ export default (options: BrokerOptions) => new Broker(options);
 export interface BrokerOptions {
 	brokerUrl: string;
 	provider: string;
+	token?: string;
 	username?: string;
 	password?: string;
 	tags?: string[];

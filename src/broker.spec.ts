@@ -45,6 +45,29 @@ describe("Broker Spec", () => {
 				})).to.not.throw(Error);
 			});
 		});
+		context("when given only a username and no password", () => {
+			it("should fail with an error", () => {
+				expect(() => {
+					brokerFactory({
+						brokerUrl: "http://test.pact.dius.com.au",
+						provider: "foobar",
+						username: "foo"
+					});
+				}).to.throw(Error);
+
+			});
+		});
+		context("when given only a password and no username", () => {
+			it("should fail with an error", () => {
+				expect(() => {
+					brokerFactory({
+						brokerUrl: "http://test.pact.dius.com.au",
+						provider: "foobar",
+						password: "bar"
+					});
+				}).to.throw(Error);
+			});
+		});
 	});
 
 	describe("Find Consumers", () => {
