@@ -46,9 +46,6 @@ package-lock.json
 ts-node-*
 
 # pact standalone binaries
-standalone/*
-!standalone/*.ts
-standalone/*.d.ts
 
 # Folders created during testing
 log
