@@ -41,12 +41,6 @@ package-lock.json
 *.tgz
 *.tar.gz
 
-# Ignore compiled files
-*.d.ts
-*.js
-*.js.map
-!postinstall.js
-!download-checksums.js
 
 # ts-node cache
 ts-node-*
